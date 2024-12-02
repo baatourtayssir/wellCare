@@ -18,7 +18,7 @@ use Doctrine\DBAL\Types\Types;
 #[InheritanceType("JOINED")]
 #[DiscriminatorColumn(name: "type", type: "string")]
 #[DiscriminatorMap([
-    'sensor' => Sensor::class, 'heartRate' => HeartRate::class, 'temperature' => Temperature::class
+    'sensor' => Sensor::class, 'heartRate' => HeartRate::class, 'temperature' => Temperature::class, 'humidity' => Humidity::class
 ])]
 #[ORM\Entity(repositoryClass: SensorRepository::class)]
 abstract class Sensor
