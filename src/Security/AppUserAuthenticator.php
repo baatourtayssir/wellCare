@@ -46,11 +46,14 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $user = $token->getUser();
-
-        // Vous pouvez maintenant gérer la redirection après une authentification réussie
-        // Par exemple, rediriger vers la page d'accueil :
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));    }
+        // Si une route cible était définie avant la connexion
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+            return new RedirectResponse($targetPath);
+        }
+    
+        // Redirection par défaut vers la page de profil
+        return new RedirectResponse($this->urlGenerator->generate('app_base'));
+    }
 
     protected function getLoginUrl(Request $request): string
     {

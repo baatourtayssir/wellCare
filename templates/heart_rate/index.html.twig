@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HeartRate Index{% endblock %}
+
+{% block body %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Heart Rates</h1>
+        <p class="mb-4">
+            This table displays all heart rate records. You can view, edit, or delete them. 
+            For further customization, refer to the 
+            <a target="_blank" href="https://datatables.net">DataTables documentation</a>.
+        </p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Heart Rate List</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>SensorId</th>
+                                <th>DeviceId</th>
+                                <th>IsOn</th>
+                                <th>Min Heart Rate</th>
+                                <th>Max Heart Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Id</th>
+                                <th>SensorId</th>
+                                 <th>DeviceId</th>
+                                <th>IsOn</th>
+                                <th>Min Heart Rate</th>
+                                <th>Max Heart Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                        {% for heart_rate in heart_rates %}
+                            <tr>
+                                <td>{{ heart_rate.id }}</td>
+                                <td>{{ heart_rate.sensorId }}</td>
+                                <td>
+                                {% if heart_rate.connectedDevice is not null %}
+
+                                    {{ heart_rate.connectedDevice.deviceId }}
+                                {% else %}
+                                    <p>No deviceId available.</p>
+                                {% endif %}
+                                </td>
+                                <td>{{ heart_rate.isOn ? 'Yes' : 'No' }}</td>
+                                <td>{{ heart_rate.minHeartRate }}</td>
+                                <td>{{ heart_rate.maxHeartRate }}</td>
+                                <td>
+                                    <a href="{{ path('app_heart_rate_show', {'id': heart_rate.id}) }}" class="btn btn-info btn-sm">Show</a>
+                                    <a href="{{ path('app_heart_rate_edit', {'id': heart_rate.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form method="post" action="{{ path('app_heart_rate_delete', {'id': heart_rate.id}) }}" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ heart_rate.id) }}">
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">No records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ path('app_heart_rate_new') }}" class="btn btn-primary">Create new</a>
+
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

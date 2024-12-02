@@ -2,25 +2,27 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
+
+    # Configuration des firewalls
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             lazy: true
             provider: app_user_provider
-            
+            custom_authenticator: App\Security\AppUserAuthenticator
+
             logout:
                 path: app_logout
                 # where to redirect after logout
                 target: app_login
-            custom_authenticator: App\Security\AppUserAuthenticator
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -28,29 +30,19 @@ security:
                 path: /
                 always_remember_me: true
 
-            # form_login:
-            #     login_path: login
-            #     check_path: login
+            
 
-            # logout:
-            #     path: logout
-            #     target: /
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
+    # Règles d'accès
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/home, roles: PUBLIC_ACCESS }
 
-        #   - { path: ^/login, roles: PUBLIC_ACCESS }
-        #   - { path: ^/register, roles: PUBLIC_ACCESS }
-        #   - { path: ^/, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_CLIENT: ROLE_USER
+        ROLE_ADMIN: ROLE_CLIENT
+
 
 when@test:
     security:

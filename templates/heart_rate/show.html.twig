@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HeartRate Details{% endblock %}
+
+{% block body %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">HeartRate Details</h1>
+    <p class="mb-4">This page displays the details for a specific heart rate record.</p>
+
+    <!-- Details Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">HeartRate Information</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ heart_rate.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>SensorId</th>
+                        <td>{{ heart_rate.sensorId }}</td>
+                    </tr>
+                    <tr>
+                        <th>IsOn</th>
+                        <td>{{ heart_rate.isOn ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Min Heart Rate</th>
+                        <td>{{ heart_rate.minHeartRate }}</td>
+                    </tr>
+                    <tr>
+                        <th>Max Heart Rate</th>
+                        <td>{{ heart_rate.maxHeartRate }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sensor Data</th>
+                        <td>
+                            {% for sensorData in heart_rate.sensorDatas %}
+                                <div class="mb-2">
+                                    <strong>Data:</strong> {{ sensorData.data }}<br>
+                                    <strong>Captured At:</strong> {{ sensorData.capturedAt ? sensorData.capturedAt|date('Y-m-d H:i:s') : 'N/A' }}
+                                </div>
+                            {% else %}
+                                <p>No sensor data available.</p>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <a href="{{ path('app_heart_rate_index') }}" class="btn btn-secondary">Back to list</a>
+    <a href="{{ path('app_heart_rate_edit', {'id': heart_rate.id}) }}" class="btn btn-warning">Edit</a>
+    {{ include('heart_rate/_delete_form.html.twig', { 'button_class': 'btn btn-danger' }) }}
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

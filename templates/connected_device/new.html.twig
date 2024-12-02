@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Connected Device{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Create a New Connected Device</h1>
+
+    <!-- Form Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">New Device Information</h6>
+        </div>
+        <div class="card-body">
+            {{ include('connected_device/_form.html.twig', { 'button_label': 'Create' }) }}
+        </div>
+    </div>
+
+    <!-- Back to List Button -->
+    <div class="text-right">
+        <a href="{{ path('app_connected_device_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+{% endblock %}

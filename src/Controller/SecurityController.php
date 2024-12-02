@@ -10,6 +10,13 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
 
+
+    #[Route('/profile', name: 'app_base')]
+    public function base(): Response
+    {
+        return $this->render('base.html.twig');
+    }
+
     #[Route('/home', name: 'app_home')]
     public function home(): Response
     {
@@ -19,9 +26,9 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+         if ($this->getUser()) {
+             return $this->redirectToRoute('app_base');
+         }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

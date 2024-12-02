@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Temperature Details{% endblock %}
+
+{% block body %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Temperature Details</h1>
+    <p class="mb-4">This page displays the details for a specific temperature record.</p>
+
+    <!-- Details Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Temperature Information</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ temperature.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>SensorId</th>
+                        <td>{{ temperature.sensorId }}</td>
+                    </tr>
+                    <tr>
+                        <th>IsOn</th>
+                        <td>{{ temperature.isOn ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Min Temperature</th>
+                        <td>{{ temperature.minTemperature }}</td>
+                    </tr>
+                    <tr>
+                        <th>Max Temperature</th>
+                        <td>{{ temperature.maxTemperature }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sensor Data</th>
+                        <td>
+                            {% for sensorData in temperature.sensorDatas %}
+                                <div class="mb-2">
+                                    <strong>Data:</strong> {{ sensorData.data }}<br>
+                                    <strong>Captured At:</strong> {{ sensorData.capturedAt ? sensorData.capturedAt|date('Y-m-d H:i:s') : 'N/A' }}
+                                </div>
+                            {% else %}
+                                <p>No sensor data available.</p>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <a href="{{ path('app_temperature_index') }}" class="btn btn-secondary">Back to list</a>
+    <a href="{{ path('app_temperature_edit', {'id': temperature.id}) }}" class="btn btn-warning">Edit</a>
+    {{ include('temperature/_delete_form.html.twig', { 'button_class': 'btn btn-danger' }) }}
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

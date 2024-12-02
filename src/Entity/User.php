@@ -2,6 +2,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -28,11 +30,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+ 
 
     #[ORM\Column]
-    private array $roles = []; // Ajout d'une propriété pour les rôles
+    private array $roles = [];
+
+    #[ORM\OneToMany(targetEntity: ConnectedDevice::class, mappedBy: 'user')]
+    private Collection $connectedDevices;
+
+    public function __construct()
+    {
+        $this->connectedDevices = new ArrayCollection();
+    } // Ajout d'une propriété pour les rôles
 
     public function getId(): ?int
     {
@@ -83,16 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
 
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-        return $this;
-    }
 
     /**
      * {@inheritdoc}
@@ -125,6 +125,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ConnectedDevice>
+     */
+    public function getConnectedDevices(): Collection
+    {
+        return $this->connectedDevices;
+    }
+
+    public function addConnectedDevice(ConnectedDevice $connectedDevice): static
+    {
+        if (!$this->connectedDevices->contains($connectedDevice)) {
+            $this->connectedDevices->add($connectedDevice);
+            $connectedDevice->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConnectedDevice(ConnectedDevice $connectedDevice): static
+    {
+        if ($this->connectedDevices->removeElement($connectedDevice)) {
+            // set the owning side to null (unless already changed)
+            if ($connectedDevice->getUser() === $this) {
+                $connectedDevice->setUser(null);
+            }
+        }
+
         return $this;
     }
 }
