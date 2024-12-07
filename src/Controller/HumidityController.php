@@ -10,15 +10,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/humidity')]
 class HumidityController extends AbstractController
 {
+    // #[Route('/', name: 'app_humidity_index', methods: ['GET'])]
+    // public function index(HumidityRepository $humidityRepository): Response
+    // {
+    //     return $this->render('humidity/index.html.twig', [
+    //         'humidities' => $humidityRepository->findAll(),
+    //     ]);
+    // }
+
     #[Route('/', name: 'app_humidity_index', methods: ['GET'])]
     public function index(HumidityRepository $humidityRepository): Response
     {
+        // Récupérer l'utilisateur connecté
+        $connectedDevice = $this->getUser()->getConnectedDevices()->first();
+    
+        // Si l'utilisateur n'a pas de ConnectedDevice, vous pouvez gérer cette situation.
+        if (!$connectedDevice) {
+            throw $this->createNotFoundException('No connected device found for this user.');
+        }
+    
+        // Rechercher les humidités liées à ce ConnectedDevice
+        $humidities = $humidityRepository->findBy(['connectedDevice' => $connectedDevice]);
+    
+        // Passer les données à la vue Twig
         return $this->render('humidity/index.html.twig', [
-            'humidities' => $humidityRepository->findAll(),
+            'humidities' => $humidities,
         ]);
     }
 

@@ -1,34 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Humidity{% endblock %}
+{% block title %}Humidity Details{% endblock %}
 
 {% block body %}
-    <h1>Humidity</h1>
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ humidity.id }}</td>
-            </tr>
-            <tr>
-                <th>SensorId</th>
-                <td>{{ humidity.sensorId }}</td>
-            </tr>
-            <tr>
-                <th>IsOn</th>
-                <td>{{ humidity.isOn ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>HumidityLevel</th>
-                <td>{{ humidity.humidityLevel }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Humidity Details</h1>
+    <p class="mb-4">This page displays the details for a specific humidity record.</p>
 
-    <a href="{{ path('app_humidity_index') }}">back to list</a>
+    <!-- Details Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Humidity Information</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ humidity.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>SensorId</th>
+                        <td>{{ humidity.sensorId }}</td>
+                    </tr>
+                    <tr>
+                        <th>IsOn</th>
+                        <td>{{ humidity.isOn ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Humidity Level</th>
+                        <td>{{ humidity.humidityLevel }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <a href="{{ path('app_humidity_edit', {'id': humidity.id}) }}">edit</a>
+    <!-- Actions -->
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('app_humidity_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+        <div>
+            <a href="{{ path('app_humidity_edit', {'id': humidity.id}) }}" class="btn btn-warning">Edit</a>
+            {{ include('humidity/_delete_form.html.twig', { 'button_class': 'btn btn-danger' }) }}
+        </div>
+    </div>
 
-    {{ include('humidity/_delete_form.html.twig') }}
+</div>
+<!-- /.container-fluid -->
 {% endblock %}

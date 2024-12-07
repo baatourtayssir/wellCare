@@ -14,14 +14,36 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/heart/rate')]
 class HeartRateController extends AbstractController
 {
+    // #[Route('/', name: 'app_heart_rate_index', methods: ['GET'])]
+    // public function index(HeartRateRepository $heartRateRepository): Response
+    // {
+        
+    //     return $this->render('heart_rate/index.html.twig', [
+    //         'heart_rates' => $heartRateRepository->findAll(),
+    //     ]);
+    // }
+
     #[Route('/', name: 'app_heart_rate_index', methods: ['GET'])]
     public function index(HeartRateRepository $heartRateRepository): Response
     {
-        
+        // Récupérer l'utilisateur connecté
+        $connectedDevice = $this->getUser()->getConnectedDevices()->first();
+    
+        // Si l'utilisateur n'a pas de ConnectedDevice, vous pouvez gérer cette situation.
+        if (!$connectedDevice) {
+            throw $this->createNotFoundException('No connected device found for this user.');
+        }
+    
+        // Rechercher les fréquences cardiaques liées à ce ConnectedDevice
+        $heartRates = $heartRateRepository->findBy(['connectedDevice' => $connectedDevice]);
+    
+        // Passer les données à la vue Twig
         return $this->render('heart_rate/index.html.twig', [
-            'heart_rates' => $heartRateRepository->findAll(),
+            'heart_rates' => $heartRates,
         ]);
     }
+    
+
 
     public function showSensorDataForSensor(int $id, EntityManagerInterface $entityManager): Response
 {

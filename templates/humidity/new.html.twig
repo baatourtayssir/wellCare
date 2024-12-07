@@ -1,11 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Humidity{% endblock %}
+{% block title %}Create New Humidity{% endblock %}
 
 {% block body %}
-    <h1>Create new Humidity</h1>
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Create a New Humidity</h1>
 
-    {{ include('humidity/_form.html.twig') }}
+    <!-- Form Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">New Humidity Information</h6>
+        </div>
+        <div class="card-body">
+            {{ include('humidity/_form.html.twig', { 'button_label': 'Create' }) }}
+        </div>
+    </div>
 
-    <a href="{{ path('app_humidity_index') }}">back to list</a>
+    <!-- Back to List Button -->
+    <div class="text-right">
+        <a href="{{ path('app_humidity_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
 {% endblock %}

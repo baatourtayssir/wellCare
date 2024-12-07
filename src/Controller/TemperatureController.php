@@ -10,18 +10,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/temperature')]
 class TemperatureController extends AbstractController
 {
+    // #[Route('/', name: 'app_temperature_index', methods: ['GET'])]
+    // public function index(TemperatureRepository $temperatureRepository): Response
+    // {
+
+
+    //     return $this->render('temperature/index.html.twig', [
+    //         'temperatures' => $temperatureRepository->findAll(),
+    //     ]);
+    // }
+
     #[Route('/', name: 'app_temperature_index', methods: ['GET'])]
     public function index(TemperatureRepository $temperatureRepository): Response
     {
+        // Récupérer l'utilisateur connecté
+        $connectedDevice = $this->getUser()->getConnectedDevices()->first();
+    
+        // Si l'utilisateur n'a pas de ConnectedDevice, vous pouvez gérer cette situation.
+        if (!$connectedDevice) {
+            throw $this->createNotFoundException('No connected device found for this user.');
+        }
+    
+        // Rechercher les températures liées à ce ConnectedDevice
+        $temperatures = $temperatureRepository->findBy(['connectedDevice' => $connectedDevice]);
+    
+        // Passer les données à la vue Twig
         return $this->render('temperature/index.html.twig', [
-            'temperatures' => $temperatureRepository->findAll(),
+            'temperatures' => $temperatures,
         ]);
     }
-
     
 
     public function showSensorDataForSensor(int $id, EntityManagerInterface $entityManager): Response

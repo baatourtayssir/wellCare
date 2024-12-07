@@ -1,39 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Humidity index{% endblock %}
+{% block title %}Humidity Index{% endblock %}
 
 {% block body %}
-    <h1>Humidity index</h1>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>SensorId</th>
-                <th>IsOn</th>
-                <th>HumidityLevel</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for humidity in humidities %}
-            <tr>
-                <td>{{ humidity.id }}</td>
-                <td>{{ humidity.sensorId }}</td>
-                <td>{{ humidity.isOn ? 'Yes' : 'No' }}</td>
-                <td>{{ humidity.humidityLevel }}</td>
-                <td>
-                    <a href="{{ path('app_humidity_show', {'id': humidity.id}) }}">show</a>
-                    <a href="{{ path('app_humidity_edit', {'id': humidity.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Humidities</h1>
+        <p class="mb-4">
+            This table displays all recorded humidity data. You can view, edit, or delete each record.
+            For further customization, refer to the 
+            <a target="_blank" href="https://datatables.net">DataTables documentation</a>.
+        </p>
 
-    <a href="{{ path('app_humidity_new') }}">Create new</a>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Humidity List</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>SensorId</th>
+                                <th>DeviceId</th>
+                                <th>IsOn</th>
+                                <th>Humidity Level</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for humidity in humidities %}
+                            <tr>
+                                <td>{{ humidity.id }}</td>
+                                <td>{{ humidity.sensorId }}</td>
+                                <td>{{ humidity.connectedDevice.deviceId }}</td>
+                                <td>{{ humidity.isOn ? 'Yes' : 'No' }}</td>
+                                <td>{{ humidity.humidityLevel }}</td>
+                                <td>
+                                    <a href="{{ path('app_humidity_show', {'id': humidity.id}) }}" class="btn btn-info btn-sm">Show</a>
+                                    <a href="{{ path('app_humidity_edit', {'id': humidity.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form method="post" action="{{ path('app_humidity_delete', {'id': humidity.id}) }}" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ humidity.id) }}">
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5">No records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ path('app_humidity_new') }}" class="btn btn-primary">Create new</a>
+
+    </div>
+    <!-- /.container-fluid -->
 {% endblock %}
