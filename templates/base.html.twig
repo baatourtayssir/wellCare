@@ -29,7 +29,6 @@
     <!-- Custom styles for this page -->
     <link href="{{asset("assets2/vendor/datatables/dataTables.bootstrap4.min.css")}}" rel="stylesheet">
 
-
 </head>
 
 <body id="page-top">
@@ -250,6 +249,25 @@
 
                     <div class="row">
 
+
+
+
+
+
+
+<div class="col-xl-8 col-lg-7">
+{{ render(controller('App\\Controller\\ChartController::chart1')) }}
+</div>
+
+<div class="col-xl-8 col-lg-7">
+{{ render(controller('App\\Controller\\ChartController::chart2')) }}
+</div>
+
+<div class="col-xl-8 col-lg-7">
+{{ render(controller('App\\Controller\\ChartController::chart3')) }}
+</div>
+
+
                         <!-- Area Chart -->
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
@@ -280,8 +298,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <!-- Pie Chart -->
                         <div class="col-xl-4 col-lg-5">

@@ -1,0 +1,130 @@
+
+
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div >
+    <div class="card shadow mb-4">
+        <!-- Card Header -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Heart Rate Chart</h6>
+        </div>
+        <div class="card-body">
+            <!-- Le graphique sera inséré ici -->
+            <canvas id="heartRateChart"></canvas>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.0"></script> <!-- Chargement du plugin -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('heartRateChart').getContext('2d');
+            var heartRateChart = new Chart(ctx, {
+                type: 'line', // Type de graphique
+                data: {
+                    labels: {{ timestamps|json_encode()|raw }}, // Labels des timestamps
+                    datasets: [{
+                        label: 'Heart Rate (bpm)', // Légende du graphique
+                        data: {{ heartRates|json_encode()|raw }}, // Données des fréquences cardiaques
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Couleur de fond (zone sous la ligne)
+                        borderColor: 'rgba(255, 99, 132, 1)', // Couleur de la ligne
+                        borderWidth: 2, // Épaisseur de la ligne
+                        fill: true, // Remplir la zone sous la ligne
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)', // Couleur des points sur la ligne
+                        pointRadius: 5, // Taille des points
+                        pointBorderWidth: 2, // Largeur des bords des points
+                        tension: 0.3, // Pour adoucir la courbe (fait une courbe plus fluide)
+                        spanGaps: true, // Connecte les points même s'il y a des "trous" dans les données
+                    }]
+                },
+                options: {
+                    responsive: true, // Le graphique sera responsive
+                    scales: {
+                        x: {
+                            type: 'linear', // L'axe X est une échelle linéaire (en secondes)
+                            position: 'bottom', // L'axe X sera en bas
+                            ticks: {
+                                beginAtZero: true, // Démarrer à zéro
+                                stepSize: 10, // Intervalle entre chaque tick (augmenter l'échelle)
+                                maxTicksLimit: 20, // Limiter le nombre de ticks pour éviter qu'ils ne se chevauchent
+                                callback: function(value, index, values) {
+                                    // Afficher uniquement les secondes sans la date
+                                    return value + 's'; // Afficher en secondes
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time (s)' // Titre de l'axe X
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 200, // Limite maximale de la fréquence cardiaque
+                            title: {
+                                display: true,
+                                text: 'Heart Rate (bpm)' // Titre de l'axe Y
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.raw + ' bpm'; // Affichage des valeurs avec l'unité (bpm)
+                                }
+                            }
+                        },
+                        // Ajout des annotations (lignes horizontales)
+                        annotation: {
+                            annotations: [
+                                {
+                                    type: 'line',
+                                    mode: 'horizontal',
+                                    scaleID: 'y',
+                                    value: {{ minHeartRate }}, // Valeur du minimum
+                                    borderColor: 'green',
+                                    borderWidth: 2,
+                                    label: {
+                                        enabled: true,
+                                        content: 'Min Heart Rate',
+                                        position: 'left',
+                                        backgroundColor: 'green',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'line',
+                                    mode: 'horizontal',
+                                    scaleID: 'y',
+                                    value: {{ maxHeartRate }}, // Valeur du maximum
+                                    borderColor: 'red',
+                                    borderWidth: 2,
+                                    label: {
+                                        enabled: true,
+                                        content: 'Max Heart Rate',
+                                        position: 'left',
+                                        backgroundColor: 'red',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% endblock %}

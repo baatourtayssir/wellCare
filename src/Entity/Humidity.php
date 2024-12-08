@@ -8,20 +8,32 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: HumidityRepository::class)]
 class Humidity extends Sensor
 {
-
+    #[ORM\Column]
+    private ?float $minHumidity = null;
 
     #[ORM\Column]
-    private ?float $humidityLevel = null;
+    private ?float $maxHumidity = null;
 
-
-    public function getHumidityLevel(): ?float
+    public function getMinHumidity(): ?float
     {
-        return $this->humidityLevel;
+        return $this->minHumidity;
     }
 
-    public function setHumidityLevel(float $humidityLevel): static
+    public function setMinHumidity(float $minHumidity): static
     {
-        $this->humidityLevel = $humidityLevel;
+        $this->minHumidity = $minHumidity;
+
+        return $this;
+    }
+
+    public function getMaxHumidity(): ?float
+    {
+        return $this->maxHumidity;
+    }
+
+    public function setMaxHumidity(float $maxHumidity): static
+    {
+        $this->maxHumidity = $maxHumidity;
 
         return $this;
     }

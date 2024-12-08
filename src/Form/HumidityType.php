@@ -38,8 +38,12 @@ class HumidityType extends AbstractType
                         ->setParameter('user', $this->security->getUser());
                 },
             ])
-             ->add('humidityLevel', NumberType::class, [
-                'label' => 'Humidity Level',
+            ->add('minHumidity', NumberType::class, [
+                'label' => 'Min Humidity',
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('maxHumidity', NumberType::class, [
+                'label' => 'Max Humidity',
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('isOn', CheckboxType::class, [

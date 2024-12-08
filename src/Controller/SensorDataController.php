@@ -48,6 +48,9 @@ class SensorDataController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sensorDatum = new SensorData();
+
+        $sensorDatum->setCapturedAt(new \DateTime());
+        
         $form = $this->createForm(SensorDataType::class, $sensorDatum);
         $form->handleRequest($request);
 

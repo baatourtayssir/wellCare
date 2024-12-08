@@ -28,7 +28,8 @@
                                 <th>SensorId</th>
                                 <th>DeviceId</th>
                                 <th>IsOn</th>
-                                <th>Humidity Level</th>
+                                <th>Min Humidity </th>
+                                <th>Max Humidity </th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -40,7 +41,8 @@
                                 <td>{{ humidity.sensorId }}</td>
                                 <td>{{ humidity.connectedDevice.deviceId }}</td>
                                 <td>{{ humidity.isOn ? 'Yes' : 'No' }}</td>
-                                <td>{{ humidity.humidityLevel }}</td>
+                                <td>{{ humidity.minHumidity }}</td>
+                                <td>{{ humidity.maxHumidity }}</td>
                                 <td>
                                     <a href="{{ path('app_humidity_show', {'id': humidity.id}) }}" class="btn btn-info btn-sm">Show</a>
                                     <a href="{{ path('app_humidity_edit', {'id': humidity.id}) }}" class="btn btn-warning btn-sm">Edit</a>

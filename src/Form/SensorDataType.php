@@ -30,11 +30,11 @@ class SensorDataType extends AbstractType
             'label' => 'Data',
             'attr' => ['class' => 'form-control'],
         ])
-        ->add('capturedAt', DateTimeType::class, [
-            'label' => 'Captured At',
-            'widget' => 'single_text',
-            'attr' => ['class' => 'form-control'],
-        ])
+        // ->add('capturedAt', DateTimeType::class, [
+        //     'label' => 'Captured At',
+        //     'widget' => 'single_text',
+        //     'attr' => ['class' => 'form-control'],
+        // ])
         ->add('sensor', EntityType::class, [
             'class' => Sensor::class,
             'choice_label' => 'sensorId',

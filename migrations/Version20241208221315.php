@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241127233107 extends AbstractMigration
+final class Version20241208221315 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20241127233107 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE connected_device CHANGE user_id user_id INT NOT NULL');
+        $this->addSql('ALTER TABLE humidity ADD max_humidity DOUBLE PRECISION NOT NULL, CHANGE humidity_level min_humidity DOUBLE PRECISION NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE connected_device CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE humidity ADD humidity_level DOUBLE PRECISION NOT NULL, DROP min_humidity, DROP max_humidity');
     }
 }

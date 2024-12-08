@@ -23,6 +23,12 @@ class SensorData
     #[ORM\ManyToOne(inversedBy: 'sensorDatas')]
     private ?Sensor $sensor = null;
 
+    public function __construct()
+    {
+        // Initialiser capturedAt avec la date et l'heure actuelles lors de la création d'une nouvelle instance
+        $this->capturedAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
